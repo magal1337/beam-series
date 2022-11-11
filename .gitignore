@@ -2,3 +2,4 @@ beam-series-scala/**/target
 beam-series-scala/.idea
 beam-series-scala/.bsp
 beam-series-scala/project
+beam-series-python/lib
