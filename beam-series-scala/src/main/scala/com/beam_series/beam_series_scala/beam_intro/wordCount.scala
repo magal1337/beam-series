@@ -45,7 +45,7 @@ object wordCount {
     val lineDist = ScioMetrics.distribution("lineLength")
     val sumNonEmpty = ScioMetrics.counter("nonEmptyLines")
     val sumEmpty = ScioMetrics.counter("emptyLines")
-
+    
     // Open text files as an `SCollection[String]`
     sc.textFile(input)
       .transform("input cleaner") {
