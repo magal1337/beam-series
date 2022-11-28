@@ -4,5 +4,5 @@ beam-series-python/share
 beam-series-scala/.idea
 beam-series-scala/.bsp
 beam-series-scala/project
-beam-series-python/lib/**
 beam-series-python/bin
+beam-series-python/lib
