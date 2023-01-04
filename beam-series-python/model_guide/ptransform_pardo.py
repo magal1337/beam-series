@@ -1,6 +1,10 @@
 import logging
 import apache_beam as beam
+from apache_beam import Row
 from apache_beam.options.pipeline_options import PipelineOptions
+import argparse
+from typing import List
+
 
 accounts = [
         {
@@ -21,9 +25,9 @@ accounts = [
             "name": "Maria",
             "age": 14,
             "gender": "F",
-            "email": "maria@foo.com",
+            "email" : "maria@foo.com",
             "is_active": False
-            },
+            }
         ]
 
 def age_to_str(account: dict):
@@ -31,7 +35,6 @@ def age_to_str(account: dict):
     return account
 
 class MyDoFn(beam.DoFn):
-
     def start_bundle(self):
         print("iniciando bundle")
     def process(self,element):
@@ -41,7 +44,8 @@ class MyDoFn(beam.DoFn):
             element["status"] = "rejected"
         yield element
     def finish_bundle(self):
-        print("finalizando bundle")
+        print("terminando um bundle")
+
 def run():
     pipeline_options = PipelineOptions()
     with beam.Pipeline(options=pipeline_options) as p:
@@ -57,7 +61,6 @@ def run():
         #beam_extract | "Print email" >> beam.Map(print)
         beam_custom | "Print pardo" >> beam.Map(print)
         p.run()
-
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
     run()
