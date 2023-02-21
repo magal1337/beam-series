@@ -12,6 +12,7 @@ import scala.collection.JavaConverters._
 import com.twitter.algebird.MinAggregator
 import scala.collection.parallel.Combiner
 import scala.util.Random
+import org.apache.beam.sdk.values.KV
 object ptransformCombineFlattenPartition {
  
   def myPartitionFn(value: Map[String,Any]): Int = {
@@ -28,7 +29,7 @@ object ptransformCombineFlattenPartition {
       }
     }
     override def mergeAccumulators(accu: java.lang.Iterable[String]): String = {
-      accu.asScala.min
+      accu.asScala.max
     }
     override def extractOutput(acc: String): String = acc
   }
@@ -118,17 +119,18 @@ object ptransformCombineFlattenPartition {
           acc2
         }
       })
-    /*
+    
     val last_joining_date_by_dept_complex = employees_kv
-      .applyKvTransform(Combine.perKey(new LastDateFn))
-    */
+      .map { case (k, v) => KV.of(k,v)}
+      .applyTransform(Combine.perKey(new LastDateFn))
+    
 
    val pcoll_groups = employees_scoll
     .partition(3,myPartitionFn)
 
     val union_pcoll = sc.unionAll(pcoll_groups)
 
-    union_pcoll
+    last_joining_date_by_dept_complex
       .map(x => println(x))
     
     sc.run()
